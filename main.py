@@ -26,9 +26,7 @@ def main():
     print("=" * 60)
 
 # ...
-# 提交
 
-# commit
 
     driver = None
 
