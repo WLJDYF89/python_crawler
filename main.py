@@ -27,6 +27,9 @@ def main():
 
 # ...
 # 提交
+
+# commit
+
     driver = None
 
     try:
