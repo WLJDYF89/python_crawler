@@ -26,7 +26,7 @@ def main():
     print("=" * 60)
 
 # ...
-# 提交
+
     driver = None
 
     try:
