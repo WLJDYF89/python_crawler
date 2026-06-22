@@ -7,7 +7,6 @@ Crawler 请求调度器模块
 4. 调用 Pipeline 清洗保存
 """
 import os
-import time
 
 from .parser import HistoryParser, SearchParser
 from .pipeline import HistoryPipeline, SearchPipeline

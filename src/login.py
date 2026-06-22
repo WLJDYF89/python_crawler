@@ -79,33 +79,34 @@ class BilibiliLogin:
         # 只截取标签 点选图片
         img_file.screenshot(self.image_path)
 
-        input("1验证结束后请按回车继续")
-        time.sleep(2)
 
-        # 发送验证码
-        btn2 = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH,
-                '//*[@id="riskWp"]/div[2]/div[2]/div[1]/div[3]'
-            ))
-        )
-        btn2.click()
-
-        input("2验证结束后请按回车继续")
-        time.sleep(2)
-
-        next_btn = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH,
-                '//*[@id="riskWp"]/div[2]/div[2]/div[2]'
-            ))
-        )
-        next_btn.click()
-
-        time.sleep(4)
-
-        # return True
-        return self._verify_login()
+        # input("1验证结束后请按回车继续")
+        # time.sleep(2)
+        #
+        # # 发送验证码
+        # btn2 = WebDriverWait(self.driver, 10).until(
+        #     EC.element_to_be_clickable((
+        #         By.XPATH,
+        #         '//*[@id="riskWp"]/div[2]/div[2]/div[1]/div[3]'
+        #     ))
+        # )
+        # btn2.click()
+        #
+        # input("2验证结束后请按回车继续")
+        # time.sleep(2)
+        #
+        # next_btn = WebDriverWait(self.driver, 10).until(
+        #     EC.element_to_be_clickable((
+        #         By.XPATH,
+        #         '//*[@id="riskWp"]/div[2]/div[2]/div[2]'
+        #     ))
+        # )
+        # next_btn.click()
+        #
+        # time.sleep(4)
+        #
+        # # return True
+        # return self._verify_login()
 
     # ================================================================
     #  验证码检测
@@ -138,14 +139,18 @@ class BilibiliLogin:
         screenshot_width, screenshot_height = Image.open(self.image_path).size
         element_width = img.size['width']
         element_height = img.size['height']
+        dpr = self.driver.execute_script("return window.devicePixelRatio")
         print('截图尺寸：', screenshot_width, screenshot_height)
         print('页面元素尺寸：', element_width, element_height)
+        print('DPR：', dpr)
         locations = self.dock_chaojiying()
         print('超级鹰返回坐标：', locations)
         for index, location in enumerate(locations, start=1):
             # 超级鹰返回的是截图像素坐标，Selenium 点击用的是页面元素的 CSS 像素坐标
             click_x = location[0] * element_width / screenshot_width
             click_y = location[1] * element_height / screenshot_height
+            # click_x = location[0] / dpr
+            # click_y = location[1] / dpr
             print('第', index, '次点击元素内坐标：', round(click_x), round(click_y))
             self.click_captcha_point(img, click_x, click_y)
             time.sleep(0.8)

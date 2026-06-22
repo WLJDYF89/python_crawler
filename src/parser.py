@@ -129,11 +129,11 @@ class HistoryParser:
                 except NoSuchElementException:
                     continue
 
-        for sel in ["a[href*='video/BV']", "a[href*='bv/']"]:
+        for sel in ["a[href*='video/BV']", "a[href*='bv/']", "a[href*='cheese/play']"]:
             try:
                 link = parent.find_element(By.CSS_SELECTOR, sel)
                 href = link.get_attribute("href") or ""
-                if href and "bilibili.com/video" in href:
+                if href and ("bilibili.com/video" in href or "bilibili.com/cheese" in href):
                     item.url = href
                     break
             except NoSuchElementException:
