@@ -75,11 +75,11 @@ class CrawlerScheduler:
             f.write(self.driver.page_source)
         print(f"[Crawler] HTML 源码已保存: {html_path}")
 
-        # 3. 保存原始解析数据
-        self._save_raw_json("search_raw.json", raw_items)
-
-        # 4. 清洗
+        # 3. 清洗
         cleaned_items = self.search_pipeline.process(raw_items)
+
+        # 4. 保存原始解析数据（清洗后字段更完整）
+        self._save_raw_json("search_raw.json", cleaned_items)
 
         # 5. 保存
         self.search_pipeline.save(cleaned_items, "search")
