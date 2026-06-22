@@ -361,19 +361,25 @@ class SearchParser:
 
     # 预渲染所有卡片
     def _pre_render_all_cards(self):
-        """从上到下逐段滚动页面，触发所有卡片的懒渲染"""
+        """从上到下逐屏慢速滚动，确保所有卡片的懒加载内容全部渲染"""
         print("[Parser] 预滚动页面，触发所有卡片懒渲染...")
         total_height = self.driver.execute_script("return document.body.scrollHeight")
         viewport_height = self.driver.execute_script("return window.innerHeight")
-        step = viewport_height // 2
+        # 每次滚动 1/3 视口高度，确保每张卡片都进入视口被渲染
+        step = max(viewport_height // 3, 200)
 
         for pos in range(0, total_height, step):
             self.driver.execute_script(f"window.scrollTo(0, {pos});")
-            time.sleep(1.5)
+            time.sleep(0.8)
 
-        # 滚到底部后多等一会，确保最后一批卡片的异步数据绑定完成
+        # 滚到底部，等待最后一批卡片渲染
         self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         time.sleep(3)
+
+        # 再从底部缓慢滚回顶部，二次触发可能遗漏的卡片
+        for pos in range(total_height, 0, -step):
+            self.driver.execute_script(f"window.scrollTo(0, {pos});")
+            time.sleep(0.5)
         self.driver.execute_script("window.scrollTo(0, 0);")
         time.sleep(2)
         print("[Parser] 预渲染完成")
@@ -473,6 +479,7 @@ class SearchParser:
             "a[href*='video/BV']",
             "a[href*='video/av']",
             "a[href*='bv/']",
+            "a[href*='cheese/play']",
             "a[href*='video']",
         ]
         for sel in url_selectors:
@@ -481,7 +488,7 @@ class SearchParser:
                 href = link.get_attribute("href") or ""
                 if href.startswith("//"):
                     href = "https:" + href
-                if href and "bilibili.com/video" in href:
+                if href and ("bilibili.com/video" in href or "bilibili.com/cheese" in href):
                     item.url = href
                     break
             except NoSuchElementException:
@@ -491,8 +498,17 @@ class SearchParser:
             href = parent.get_attribute("href") or ""
             if href.startswith("//"):
                 href = "https:" + href
-            if "video" in href:
+            if "video" in href or "cheese" in href:
                 item.url = href
+
+        if not item.url:
+            try:
+                ad_link = parent.find_element(By.CSS_SELECTOR, "a[data-target-url]")
+                target = ad_link.get_attribute("data-target-url") or ""
+                if target and "bilibili.com/video" in target:
+                    item.url = target
+            except Exception:
+                pass
 
         # 播放量 & 弹幕数
         try:
