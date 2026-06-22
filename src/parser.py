@@ -316,7 +316,7 @@ class SearchParser:
             print("[Parser] 搜索结果列表加载超时,尝试继续解析...")
             time.sleep(5)
 
-        # self._scroll_to_load_all()
+        self._scroll_to_load_all()
 
         time.sleep(3)
 
@@ -369,10 +369,13 @@ class SearchParser:
 
         for pos in range(0, total_height, step):
             self.driver.execute_script(f"window.scrollTo(0, {pos});")
-            time.sleep(0.4)
+            time.sleep(1.5)
 
+        # 滚到底部后多等一会，确保最后一批卡片的异步数据绑定完成
+        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        time.sleep(3)
         self.driver.execute_script("window.scrollTo(0, 0);")
-        time.sleep(1)
+        time.sleep(2)
         print("[Parser] 预渲染完成")
 
     # 解析单个搜索结果卡片
