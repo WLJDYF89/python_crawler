@@ -231,8 +231,8 @@ class SearchPipeline(BasePipeline):
             item.url = item.url or ""
             item.play_count = item.play_count or "0"
             item.danmu_count = item.danmu_count or "0"
-            item.video_duration = item.video_duration or ""
-            item.display_publish_time = item.display_publish_time or ""
+            item.video_duration = item.video_duration or "无显示内容"
+            item.display_publish_time = item.display_publish_time or "无显示内容"
 
         # 3. 中文数字单位转换
         for item in unique:
@@ -260,16 +260,28 @@ class SearchPipeline(BasePipeline):
         # 保存 CSV
         csv_path = f"results/{prefix}_cleaned.csv"
         if items:
+            # fieldnames = [
+            #     "视频标题", "UP主", "详情页URL", "播放量", "播放量(数值)",
+            #     "弹幕数", "弹幕数(数值)", "视频时长", "页面展示发布时间",
+            #     "规范化发布日期", "热度指标"
+            # ]
+            # field_keys = [
+            #     "title", "author", "url", "play_count", "play_count_num",
+            #     "danmu_count", "danmu_count_num", "video_duration", "display_publish_time",
+            #     "normalized_publish_date", "hot_score"
+            # ]
+
             fieldnames = [
-                "视频标题", "UP主", "详情页URL", "播放量", "播放量(数值)",
-                "弹幕数", "弹幕数(数值)", "视频时长", "页面展示发布时间",
+                "视频标题", "UP主", "详情页URL", "播放量",
+                "弹幕数", "视频时长", "页面展示发布时间",
                 "规范化发布日期", "热度指标"
             ]
             field_keys = [
-                "title", "author", "url", "play_count", "play_count_num",
-                "danmu_count", "danmu_count_num", "video_duration", "display_publish_time",
+                "title", "author", "url", "play_count_num",
+                "danmu_count_num", "video_duration", "display_publish_time",
                 "normalized_publish_date", "hot_score"
             ]
+
             with open(csv_path, "w", newline="", encoding="utf-8-sig") as f:
                 writer = csv.writer(f)
                 writer.writerow(fieldnames)

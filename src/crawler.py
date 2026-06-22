@@ -91,6 +91,10 @@ class CrawlerScheduler:
         import json
         os.makedirs("results", exist_ok=True)
         path = os.path.join("results", filename)
+        exclude_keys = {"play_count", "danmu_count"}
         with open(path, "w", encoding="utf-8") as f:
-            json.dump([item.to_dict() for item in items], f, ensure_ascii=False, indent=2)
+            json.dump(
+                [{k: v for k, v in item.to_dict().items() if k not in exclude_keys} for item in items],
+                f, ensure_ascii=False, indent=2
+            )
         print(f"[Crawler] 原始数据已保存: {path}")
