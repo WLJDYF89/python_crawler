@@ -346,8 +346,8 @@ class SearchParser:
         print(f"[Parser] 搜索结果页面发现 {len(video_items)} 个视频元素")
 
         for item_el in video_items:
-            if len(items) >= 36:
-                print(f"[Parser] 已达到目标数量36条，停止爬取")
+            if len(items) >= 24:
+                print(f"[Parser] 已达到目标数量24条，停止爬取")
                 break
             try:
                 item = self._parse_single(item_el)
@@ -595,12 +595,17 @@ class SearchParser:
             )
             time.sleep(0.3)
 
-            for _ in range(5):
+            for _ in range(3):
                 try:
                     elements = card.find_elements(By.CSS_SELECTOR,
                         ".bili-video-card__info--author, .bili-video-card__info--owner, "
                         ".up-name, [class*='author'], [class*='up-name']")
                     for el in elements:
+                        if el.text.strip():
+                            return
+                    stats = card.find_elements(By.CSS_SELECTOR,
+                        ".bili-video-card__stats--item, [class*='stats']")
+                    for el in stats:
                         if el.text.strip():
                             return
                 except Exception:
