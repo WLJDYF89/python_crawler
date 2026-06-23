@@ -320,7 +320,7 @@ class SearchParser:
 
         time.sleep(3)
 
-        self._pre_render_all_cards()
+        # self._pre_render_all_cards()
 
         video_selectors = [
             ".video-list-item",
@@ -347,7 +347,7 @@ class SearchParser:
 
         for item_el in video_items:
             if len(items) >= 24:
-                print(f"[Parser] 已达到目标数量24条，停止爬取")
+                print(f"[Parser] 已达到目标数量，停止爬取")
                 break
             try:
                 item = self._parse_single(item_el)
@@ -358,31 +358,6 @@ class SearchParser:
 
         print(f"[Parser] 搜索结果解析完成，共 {len(items)} 条")
         return items
-
-    # 预渲染所有卡片
-    def _pre_render_all_cards(self):
-        """从上到下逐屏慢速滚动，确保所有卡片的懒加载内容全部渲染"""
-        print("[Parser] 预滚动页面，触发所有卡片懒渲染...")
-        total_height = self.driver.execute_script("return document.body.scrollHeight")
-        viewport_height = self.driver.execute_script("return window.innerHeight")
-        # 每次滚动 1/3 视口高度，确保每张卡片都进入视口被渲染
-        step = max(viewport_height // 3, 200)
-
-        for pos in range(0, total_height, step):
-            self.driver.execute_script(f"window.scrollTo(0, {pos});")
-            time.sleep(0.8)
-
-        # 滚到底部，等待最后一批卡片渲染
-        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(3)
-
-        # 再从底部缓慢滚回顶部，二次触发可能遗漏的卡片
-        for pos in range(total_height, 0, -step):
-            self.driver.execute_script(f"window.scrollTo(0, {pos});")
-            time.sleep(0.5)
-        self.driver.execute_script("window.scrollTo(0, 0);")
-        time.sleep(2)
-        print("[Parser] 预渲染完成")
 
     # 解析单个搜索结果卡片
     def _parse_single(self, card) -> SearchItem:
