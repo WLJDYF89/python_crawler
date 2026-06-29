@@ -2,8 +2,7 @@
 Scrapy 风格的 Item 数据结构定义
 定义历史记录和搜索结果的数据字段
 """
-from dataclasses import dataclass, field, asdict
-from typing import Optional
+from dataclasses import dataclass, asdict
 
 
 @dataclass

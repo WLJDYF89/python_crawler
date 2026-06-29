@@ -55,8 +55,8 @@ def main():
         # Cookie 无效则自动登录
         if not logged_in:
             login_handler = BilibiliLogin(driver)
-            logged_in = login_handler.simulated_click()
-            # logged_in = login_handler.login()
+            # logged_in = login_handler.simulated_click()
+            logged_in = login_handler.login()
 
             if not logged_in:
                 print("\n[Main] 自动登录失败，尝试手动登录...")

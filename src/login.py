@@ -60,7 +60,7 @@ class BilibiliLogin:
                 '/html/body/div[3]/div/div[4]/div[2]/form/div[3]/input'
             ))
         )
-        send2.send_keys("WLJDYF89")
+        send2.send_keys("3768287369we")
 
         # 点击登录，弹出验证码
         tab = WebDriverWait(self.driver, 10).until(
@@ -80,33 +80,24 @@ class BilibiliLogin:
         img_file.screenshot(self.image_path)
 
 
-        # input("1验证结束后请按回车继续")
-        # time.sleep(2)
-        #
-        # # 发送验证码
-        # btn2 = WebDriverWait(self.driver, 10).until(
-        #     EC.element_to_be_clickable((
-        #         By.XPATH,
-        #         '//*[@id="riskWp"]/div[2]/div[2]/div[1]/div[3]'
-        #     ))
-        # )
-        # btn2.click()
-        #
-        # input("2验证结束后请按回车继续")
-        # time.sleep(2)
-        #
-        # next_btn = WebDriverWait(self.driver, 10).until(
-        #     EC.element_to_be_clickable((
-        #         By.XPATH,
-        #         '//*[@id="riskWp"]/div[2]/div[2]/div[2]'
-        #     ))
-        # )
-        # next_btn.click()
-        #
-        # time.sleep(4)
-        #
-        # # return True
-        # return self._verify_login()
+        input("1验证结束后请按回车继续")
+        time.sleep(2)
+
+        # 发送验证码
+        btn2 = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((
+                By.XPATH,
+                '//*[@id="riskWp"]/div[2]/div[2]/div[1]/div[3]'
+            ))
+        )
+        btn2.click()
+
+        input("2验证结束后请按回车继续")
+
+        time.sleep(4)
+
+        # return True
+        return self._verify_login()
 
     # ================================================================
     #  验证码检测
@@ -173,16 +164,6 @@ class BilibiliLogin:
         btn2.click()
 
         input("验证结束后请按回车继续")
-        time.sleep(2)
-
-        # 点击下一步
-        next_btn = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH,
-                '//*[@id="riskWp"]/div[2]/div[2]/div[2]'
-            ))
-        )
-        next_btn.click()
 
         time.sleep(4)
 

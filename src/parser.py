@@ -221,7 +221,7 @@ class SearchParser:
     解析搜索「vibecoding」的结果页面
     """
 
-    SEARCH_KEYWORD = "vibecoding"
+    SEARCH_KEYWORD = "aiagent"
     SEARCH_URL = f"https://search.bilibili.com/all?keyword={SEARCH_KEYWORD}&order=totalrank"
 
     def __init__(self, driver):
@@ -315,6 +315,8 @@ class SearchParser:
         except TimeoutException:
             print("[Parser] 搜索结果列表加载超时,尝试继续解析...")
             time.sleep(5)
+
+        time.sleep(3)
 
         self._scroll_to_load_all()
 
